@@ -31,7 +31,7 @@ tinymce_ai_html = f"""
 
         tinymce.init({{
           selector: '#tinymce-editor',
-          height: "500",
+          height: "500",  // Adjusted height
           plugins: 'ai',
           toolbar: 'aidialog aishortcuts',
           ai_request: (request, respondWith) => {{
@@ -39,7 +39,7 @@ tinymce_ai_html = f"""
               method: 'POST',
               headers: {{
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer {openai_key}',
+                'api-key': '{openai_key}',
               }},
               body: JSON.stringify({{
                 messages: [{{
@@ -74,33 +74,10 @@ tinymce_ai_html = f"""
     </script>
   </head>
   <body>
-    <textarea id="tinymce-editor">Welcome! Ask me anything and let the AI magic begin...</textarea>
+    <textarea id="tinymce-editor">Welcome! Ask me something...</textarea>
   </body>
   </html>
 """
-
-from db_setup import MongoDBConnection
-
-db_connection = MongoDBConnection()
-
-db_connection.connect()
-
-#example data
-ai_prompt = "What is the future of AI?"
-ai_response = "The future of AI is incredibly promising, with advancements leading to smarter technologies that will enhance our daily lives in numerous ways."
-
-data_to_insert = {
-    "prompt": ai_prompt,
-    "response": ai_response
-}
-
-success = db_connection.insert_data("ai_prompts", data_to_insert)
-
-if success:
-    print("Successfully inserted AI prompt and response into MongoDB.")
-else:
-    print("Failed to insert data into MongoDB.")
-
 
 def main():
     # Sidebar
@@ -134,7 +111,7 @@ def main():
         """)
 
         # Display the TinyMCE editor
-        components.html(tinymce_ai_html, height=900, width=1000, scrolling=True)
+        components.html(tinymce_ai_html, height=800, width=800, scrolling=True)
     else:
         st.error("🔒 Please log in to access the AI editor.")
 
